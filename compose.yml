@@ -1,30 +1,26 @@
----
-version: "3"
-services:
- devopsdb:
-   image: anilpspk/project:db
-   ports:
-     - "3306:3306"
-   networks:
-     - my_network
-   volumes:
-     - my_data:/var/lib/db
-   deploy:
-     replicas: 2
+version: "3.9"
 
- application:
-   image: anilpspk/project:app
-   ports:
-     - "1111:8080"
-   networks:
-     - my_network
-   depends_on:
-     - "devopsdb"
-   deploy:
-     replicas: 2
+services:
+  devopsdb:
+    image: anilpspk/project:db
+    ports:
+      - "3306:3306"
+    deploy:
+      replicas: 3
+    networks:
+      - mynetwork
+
+  application:
+    image: anilpspk/project:app
+    ports:
+      - "1111:8080"
+    deploy:
+      replicas: 3
+    depends_on:
+      - devopsdb
+    networks:
+      - mynetwork
 
 networks:
- my_network:
-   driver: overlay
-volumes:
-  my_data:
+  mynetwork:
+    driver: overlay
